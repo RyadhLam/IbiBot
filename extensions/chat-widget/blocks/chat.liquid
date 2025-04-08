@@ -1,0 +1,24 @@
+{% schema %}
+{
+  "name": "Chat Assistant IA",
+  "target": "body",
+  "stylesheet": "chat-widget.css",
+  "javascript": "chat-widget.js",
+  "settings": [
+    {
+      "type": "text",
+      "id": "welcome_message",
+      "label": "Message de bienvenue",
+      "default": "Bonjour ! Comment puis-je vous aider ?"
+    },
+    {
+      "type": "color",
+      "id": "chat_color",
+      "label": "Couleur principale",
+      "default": "#4F46E5"
+    }
+  ]
+}
+{% endschema %}
+
+<div id="shopify-chat-widget"></div> 
