@@ -48,6 +48,7 @@ class ChatWidget {
     const chatButton = document.createElement('button');
     chatButton.className = `chat-widget-button ${this.buttonStyle}`;
     chatButton.style.backgroundColor = this.buttonColor;
+    chatButton.style.color = '#FFFFFF';
     chatButton.innerHTML = `
       ${this.getIconSvg()}
       ${this.buttonStyle === 'rectangle' ? `<span class="button-text">${this.buttonText}</span>` : ''}
@@ -60,7 +61,7 @@ class ChatWidget {
     const chatWindow = document.createElement('div');
     chatWindow.className = 'chat-window';
     chatWindow.innerHTML = `
-      <div class="chat-header" style="background: ${this.headerColor}">
+      <div class="chat-header">
         <div class="chat-header-title">
           ${this.chatLogo ? `
             <img src="${this.chatLogo}" 
@@ -72,14 +73,14 @@ class ChatWidget {
           <h3>${this.chatTitle}</h3>
         </div>
       </div>
-      <div class="chat-messages" style="background: ${this.chatBackground}">
+      <div class="chat-messages">
         <div class="message bot-message">
           <div class="message-content">${this.welcomeMessage}</div>
         </div>
       </div>
       <form class="chat-form">
         <input type="text" placeholder="Tapez votre message..." required>
-        <button type="submit" style="background: ${this.buttonColor}">
+        <button type="submit">
           <svg viewBox="0 0 24 24" width="24" height="24">
             <path fill="currentColor" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
           </svg>
@@ -108,12 +109,27 @@ class ChatWidget {
         ${isLeftPosition ? 'left: 20px; right: auto;' : 'right: 20px; left: auto;'}
       }
 
+      .chat-header {
+        background-color: ${this.headerColor} !important;
+      }
+
+      .chat-messages {
+        background-color: ${this.chatBackground};
+      }
+
       .user-message .message-content {
         background-color: ${this.userMessageColor};
+        color: white;
       }
       
       .bot-message .message-content {
         background-color: ${this.botMessageColor};
+        color: #333333;
+      }
+
+      .chat-form button {
+        background-color: ${this.buttonColor};
+        color: white;
       }
       
       .chat-widget-button.rectangle {
@@ -155,7 +171,6 @@ class ChatWidget {
     const chatIcon = chatButton.querySelector('.chat-icon');
     const closeIcon = chatButton.querySelector('.close-icon');
     const chatForm = this.widget.querySelector('.chat-form');
-    const messagesContainer = this.widget.querySelector('.chat-messages');
 
     // Ouvrir/fermer la fenêtre de chat
     chatButton.addEventListener('click', () => {
@@ -201,7 +216,7 @@ class ChatWidget {
     const messageDiv = document.createElement('div');
     messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
     messageDiv.innerHTML = `
-      <div class="message-content" style="background-color: ${isUser ? this.userMessageColor : this.botMessageColor}">
+      <div class="message-content">
         ${text}
       </div>
     `;

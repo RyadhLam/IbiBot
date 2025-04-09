@@ -3,7 +3,7 @@
 client_id = "332cb4617693ed6b0861c91a3e943510"
 name = "Aria"
 handle = "aria-3"
-application_url = "https://mpegs-sao-interim-benefits.trycloudflare.com"
+application_url = "https://man-servers-hardcover-amazing.trycloudflare.com"
 embedded = true
 
 [build]
@@ -27,9 +27,9 @@ scopes = "write_products"
 
 [auth]
 redirect_urls = [
-  "https://mpegs-sao-interim-benefits.trycloudflare.com/auth/callback",
-  "https://mpegs-sao-interim-benefits.trycloudflare.com/auth/shopify/callback",
-  "https://mpegs-sao-interim-benefits.trycloudflare.com/api/auth/callback"
+  "https://man-servers-hardcover-amazing.trycloudflare.com/auth/callback",
+  "https://man-servers-hardcover-amazing.trycloudflare.com/auth/shopify/callback",
+  "https://man-servers-hardcover-amazing.trycloudflare.com/api/auth/callback"
 ]
 
 [pos]
