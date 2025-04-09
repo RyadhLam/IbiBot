@@ -3,7 +3,7 @@
 client_id = "332cb4617693ed6b0861c91a3e943510"
 name = "Aria"
 handle = "aria-3"
-application_url = "https://legs-minor-buildings-constitute.trycloudflare.com"
+application_url = "https://mpegs-sao-interim-benefits.trycloudflare.com"
 embedded = true
 
 [build]
@@ -27,9 +27,9 @@ scopes = "write_products"
 
 [auth]
 redirect_urls = [
-  "https://legs-minor-buildings-constitute.trycloudflare.com/auth/callback",
-  "https://legs-minor-buildings-constitute.trycloudflare.com/auth/shopify/callback",
-  "https://legs-minor-buildings-constitute.trycloudflare.com/api/auth/callback"
+  "https://mpegs-sao-interim-benefits.trycloudflare.com/auth/callback",
+  "https://mpegs-sao-interim-benefits.trycloudflare.com/auth/shopify/callback",
+  "https://mpegs-sao-interim-benefits.trycloudflare.com/api/auth/callback"
 ]
 
 [pos]

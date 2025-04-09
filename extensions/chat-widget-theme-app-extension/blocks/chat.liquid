@@ -46,42 +46,20 @@
       "default": "chat"
     },
     {
-      "type": "text",
-      "id": "button_text",
-      "label": "Texte du bouton",
-      "default": "Chat avec l'assistant"
-    },
-    {
       "type": "color",
       "id": "button_color",
       "label": "Couleur du bouton",
       "default": "#008060"
     },
     {
-      "type": "color",
-      "id": "button_text_color",
-      "label": "Couleur du texte du bouton",
-      "default": "#FFFFFF"
+      "type": "text",
+      "id": "button_text",
+      "label": "Texte du bouton",
+      "default": "Chat avec l'assistant"
     },
     {
       "type": "header",
       "content": "Fenêtre de chat"
-    },
-    {
-      "type": "image_picker",
-      "id": "chat_logo",
-      "label": "Logo personnalisé",
-      "info": "Recommandé: 40x40px à 100x100px"
-    },
-    {
-      "type": "range",
-      "id": "logo_size",
-      "min": 20,
-      "max": 60,
-      "step": 5,
-      "unit": "px",
-      "label": "Taille du logo",
-      "default": 40
     },
     {
       "type": "text",
@@ -120,6 +98,22 @@
       "default": "#FFFFFF"
     },
     {
+      "type": "image_picker",
+      "id": "chat_logo",
+      "label": "Logo personnalisé",
+      "info": "Recommandé: 40x40px à 100x100px"
+    },
+    {
+      "type": "range",
+      "id": "logo_size",
+      "min": 20,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "label": "Taille du logo",
+      "default": 40
+    },
+    {
       "type": "select",
       "id": "chat_position",
       "label": "Position du chat",
@@ -142,7 +136,6 @@
 <div id="shopify-chat-widget" 
   data-welcome-message="{{ block.settings.welcome_message }}"
   data-button-color="{{ block.settings.button_color }}"
-  data-button-text-color="{{ block.settings.button_text_color }}"
   data-button-text="{{ block.settings.button_text }}"
   data-button-style="{{ block.settings.button_style }}"
   data-button-icon="{{ block.settings.button_icon }}"

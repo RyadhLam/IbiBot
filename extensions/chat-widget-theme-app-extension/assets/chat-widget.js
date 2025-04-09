@@ -6,7 +6,6 @@ class ChatWidget {
     // Récupérer toutes les options de personnalisation
     this.welcomeMessage = this.widget.dataset.welcomeMessage;
     this.buttonColor = this.widget.dataset.buttonColor;
-    this.buttonTextColor = this.widget.dataset.buttonTextColor;
     this.buttonText = this.widget.dataset.buttonText;
     this.buttonStyle = this.widget.dataset.buttonStyle;
     this.buttonIcon = this.widget.dataset.buttonIcon;
@@ -49,7 +48,6 @@ class ChatWidget {
     const chatButton = document.createElement('button');
     chatButton.className = `chat-widget-button ${this.buttonStyle}`;
     chatButton.style.backgroundColor = this.buttonColor;
-    chatButton.style.color = this.buttonTextColor;
     chatButton.innerHTML = `
       ${this.getIconSvg()}
       ${this.buttonStyle === 'rectangle' ? `<span class="button-text">${this.buttonText}</span>` : ''}
@@ -67,7 +65,7 @@ class ChatWidget {
           ${this.chatLogo ? `
             <img src="${this.chatLogo}" 
                  alt="${this.chatTitle}" 
-                 class="chat-logo" 
+                 class="chat-logo"
                  style="width: ${this.logoSize}px; height: ${this.logoSize}px;"
             >
           ` : `<div class="chat-header-dot"></div>`}
@@ -99,34 +97,53 @@ class ChatWidget {
 
   applyCustomStyles() {
     const style = document.createElement('style');
+    const isLeftPosition = this.chatPosition === 'bottom-left';
+    
     style.textContent = `
       .chat-widget-container {
-        ${this.chatPosition === 'bottom-left' ? 'left: 20px; right: auto;' : 'right: 20px; left: auto;'}
+        ${isLeftPosition ? 'left: 20px; right: auto;' : 'right: 20px; left: auto;'}
       }
+      
+      .chat-window {
+        ${isLeftPosition ? 'left: 20px; right: auto;' : 'right: 20px; left: auto;'}
+      }
+
       .user-message .message-content {
         background-color: ${this.userMessageColor};
       }
+      
       .bot-message .message-content {
         background-color: ${this.botMessageColor};
       }
+      
       .chat-widget-button.rectangle {
         width: auto;
         padding: 0 20px;
         border-radius: 30px;
         gap: 10px;
       }
+      
       .chat-widget-button .button-text {
         font-size: 14px;
         white-space: nowrap;
       }
+      
       .chat-logo {
         border-radius: 50%;
         object-fit: cover;
         margin-right: 10px;
       }
+      
       .chat-header-title {
         display: flex;
         align-items: center;
+      }
+
+      @media (max-width: 768px) {
+        .chat-window {
+          width: calc(100% - 40px);
+          ${isLeftPosition ? 'left: 20px; right: 20px;' : 'right: 20px; left: 20px;'}
+        }
       }
     `;
     document.head.appendChild(style);
