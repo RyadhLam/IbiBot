@@ -1,122 +1,91 @@
-import { useState, useRef, useEffect } from 'react';
-import {
-  Card,
-  Button,
-  TextField,
-  Icon,
-  Frame,
-  Modal,
-  TextContainer,
-  Text,
-} from '@shopify/polaris';
+import { useState } from "react";
+import { Form } from "@remix-run/react";
 
-interface Message {
-  id: string;
-  text: string;
-  isUser: boolean;
-  timestamp: Date;
-}
-
-export default function ChatWidget() {
+export function ChatWidget() {
+  const [messages, setMessages] = useState<Array<{ text: string; isUser: boolean }>>([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [inputValue, setInputValue] = useState('');
-  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const message = formData.get("message") as string;
+    
+    if (!message.trim()) return;
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    // Ajouter le message de l'utilisateur
+    setMessages(prev => [...prev, { text: message, isUser: true }]);
 
-  const handleSendMessage = () => {
-    if (!inputValue.trim()) return;
-
-    const newMessage: Message = {
-      id: Date.now().toString(),
-      text: inputValue,
-      isUser: true,
-      timestamp: new Date(),
-    };
-
-    setMessages((prev) => [...prev, newMessage]);
-    setInputValue('');
-
-    // Simuler une réponse du chatbot (à remplacer par votre API IA)
-    setTimeout(() => {
-      const botResponse: Message = {
-        id: (Date.now() + 1).toString(),
-        text: "Je suis en train d'apprendre à répondre. Bientôt, je pourrai vous aider !",
-        isUser: false,
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, botResponse]);
-    }, 1000);
-  };
-
-  const handleKeyPress = (e: KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSendMessage();
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      
+      // Ajouter la réponse du bot
+      setMessages(prev => [...prev, { text: data.response, isUser: false }]);
+    } catch (error) {
+      console.error("Error:", error);
     }
-  };
 
-  const modalMarkup = (
-    <Modal
-      open={isOpen}
-      onClose={() => setIsOpen(false)}
-      title="Assistant IA"
-    >
-      <Modal.Section>
-        <div style={{ height: '400px', overflowY: 'auto', marginBottom: '20px' }}>
-          {messages.map((message) => (
-            <div
-              key={message.id}
-              style={{
-                display: 'flex',
-                justifyContent: message.isUser ? 'flex-end' : 'flex-start',
-                marginBottom: '12px',
-              }}
-            >
-              <TextContainer>
-                <Text as="p" variant={message.isUser ? "bodyMd" : "bodyMd"}>
-                  {message.text}
-                </Text>
-              </TextContainer>
-            </div>
-          ))}
-          <div ref={messagesEndRef} />
-        </div>
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <div style={{ flex: 1 }}>
-            <TextField
-              label=""
-              value={inputValue}
-              onChange={setInputValue}
-              autoComplete="off"
-              placeholder="Écrivez votre message..."
-              multiline={1}
-              onBlur={() => {}}
-            />
-          </div>
-          <Button variant="primary" onClick={handleSendMessage}>
-            Envoyer
-          </Button>
-        </div>
-      </Modal.Section>
-    </Modal>
-  );
+    // Réinitialiser le formulaire
+    event.currentTarget.reset();
+  }
 
   return (
-    <Frame>
-      <div style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 1000 }}>
-        <Button onClick={() => setIsOpen(true)} variant="primary">
-          💬 Chat
-        </Button>
-      </div>
-      {modalMarkup}
-    </Frame>
+    <div className="fixed bottom-4 right-4">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="bg-blue-500 text-white p-2 rounded-full shadow-lg"
+      >
+        {isOpen ? "Fermer" : "Chat"}
+      </button>
+
+      {isOpen && (
+        <div className="fixed bottom-16 right-4 w-80 bg-white rounded-lg shadow-xl">
+          <div className="p-4 border-b">
+            <h3 className="text-lg font-semibold">Assistant</h3>
+          </div>
+
+          <div className="h-96 overflow-y-auto p-4">
+            {messages.map((msg, index) => (
+              <div
+                key={index}
+                className={`mb-4 ${
+                  msg.isUser ? "text-right" : "text-left"
+                }`}
+              >
+                <div
+                  className={`inline-block p-2 rounded-lg ${
+                    msg.isUser
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-200 text-gray-800"
+                  }`}
+                >
+                  {msg.text}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <Form onSubmit={handleSubmit} className="p-4 border-t">
+            <div className="flex gap-2">
+              <input
+                type="text"
+                name="message"
+                placeholder="Tapez votre message..."
+                className="flex-1 p-2 border rounded"
+              />
+              <button
+                type="submit"
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+              >
+                Envoyer
+              </button>
+            </div>
+          </Form>
+        </div>
+      )}
+    </div>
   );
 } 

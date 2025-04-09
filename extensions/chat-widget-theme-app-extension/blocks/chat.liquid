@@ -1,0 +1,157 @@
+{% schema %}
+{
+  "name": "Chat Assistant IA",
+  "target": "body",
+  "stylesheet": "chat-widget.css",
+  "javascript": "chat-widget.js",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Style du bouton"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Style du bouton",
+      "options": [
+        {
+          "value": "bubble",
+          "label": "Bulle ronde"
+        },
+        {
+          "value": "rectangle",
+          "label": "Rectangle"
+        }
+      ],
+      "default": "bubble"
+    },
+    {
+      "type": "select",
+      "id": "button_icon",
+      "label": "Icône du bouton",
+      "options": [
+        {
+          "value": "chat",
+          "label": "Bulle de chat"
+        },
+        {
+          "value": "message",
+          "label": "Message"
+        },
+        {
+          "value": "support",
+          "label": "Support"
+        }
+      ],
+      "default": "chat"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Texte du bouton",
+      "default": "Chat avec l'assistant"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Couleur du bouton",
+      "default": "#008060"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Couleur du texte du bouton",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Fenêtre de chat"
+    },
+    {
+      "type": "image_picker",
+      "id": "chat_logo",
+      "label": "Logo personnalisé",
+      "info": "Recommandé: 40x40px à 100x100px"
+    },
+    {
+      "type": "range",
+      "id": "logo_size",
+      "min": 20,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "label": "Taille du logo",
+      "default": 40
+    },
+    {
+      "type": "text",
+      "id": "welcome_message",
+      "label": "Message de bienvenue",
+      "default": "Bonjour ! Comment puis-je vous aider ?"
+    },
+    {
+      "type": "text",
+      "id": "chat_title",
+      "label": "Titre de la fenêtre de chat",
+      "default": "Assistant"
+    },
+    {
+      "type": "color",
+      "id": "header_color",
+      "label": "Couleur de l'en-tête",
+      "default": "#008060"
+    },
+    {
+      "type": "color",
+      "id": "chat_background",
+      "label": "Couleur de fond de la conversation",
+      "default": "#f8f9fa"
+    },
+    {
+      "type": "color",
+      "id": "user_message_color",
+      "label": "Couleur des messages utilisateur",
+      "default": "#008060"
+    },
+    {
+      "type": "color",
+      "id": "bot_message_color",
+      "label": "Couleur des messages assistant",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "select",
+      "id": "chat_position",
+      "label": "Position du chat",
+      "options": [
+        {
+          "value": "bottom-right",
+          "label": "Bas droite"
+        },
+        {
+          "value": "bottom-left",
+          "label": "Bas gauche"
+        }
+      ],
+      "default": "bottom-right"
+    }
+  ]
+}
+{% endschema %}
+
+<div id="shopify-chat-widget" 
+  data-welcome-message="{{ block.settings.welcome_message }}"
+  data-button-color="{{ block.settings.button_color }}"
+  data-button-text-color="{{ block.settings.button_text_color }}"
+  data-button-text="{{ block.settings.button_text }}"
+  data-button-style="{{ block.settings.button_style }}"
+  data-button-icon="{{ block.settings.button_icon }}"
+  data-chat-title="{{ block.settings.chat_title }}"
+  data-header-color="{{ block.settings.header_color }}"
+  data-chat-background="{{ block.settings.chat_background }}"
+  data-user-message-color="{{ block.settings.user_message_color }}"
+  data-bot-message-color="{{ block.settings.bot_message_color }}"
+  data-chat-position="{{ block.settings.chat_position }}"
+  data-chat-logo="{{ block.settings.chat_logo | image_url: width: block.settings.logo_size }}"
+  data-logo-size="{{ block.settings.logo_size }}">
+</div> 
