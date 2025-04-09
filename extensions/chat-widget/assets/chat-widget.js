@@ -23,9 +23,7 @@ class ChatWidget {
           </form>
         </div>
         <button class="toggle-chat-button">
-          <svg class="chat-icon" viewBox="0 0 24 24" width="24" height="24">
-            <path fill="currentColor" d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
-          </svg>
+          💬 Chat
         </button>
       </div>
     `;
@@ -73,11 +71,10 @@ class ChatWidget {
     
     if (!message) return;
 
-    // Ajouter le message de l'utilisateur
     this.addMessage({ text: message, isBot: false });
     input.value = '';
 
-    // Simuler une réponse du bot (à remplacer par votre API)
+    // Simuler une réponse du bot
     setTimeout(() => {
       this.addMessage({ 
         text: "Je suis en train d'apprendre à répondre. Bientôt, je pourrai vous aider !", 
@@ -96,7 +93,7 @@ class ChatWidget {
   }
 }
 
-// Initialiser le widget
+// Initialiser le widget quand le DOM est chargé
 document.addEventListener('DOMContentLoaded', () => {
   new ChatWidget();
 }); 

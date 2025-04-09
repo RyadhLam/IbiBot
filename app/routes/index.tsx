@@ -1,6 +1,6 @@
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import ChatWidget from "~/components/ChatWidget";
+import ChatWidget from "../components/ChatWidget";
 
 export const loader = async () => {
   return json({
