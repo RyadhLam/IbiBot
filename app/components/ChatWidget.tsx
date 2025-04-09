@@ -36,13 +36,13 @@ export function ChatWidget() {
     <div className="fixed bottom-4 right-4">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="bg-blue-500 text-white p-2 rounded-full shadow-lg"
+        className="bg-blue-500 text-white p-2 shadow-lg"
       >
         {isOpen ? "Fermer" : "Chat"}
       </button>
 
       {isOpen && (
-        <div className="fixed bottom-16 right-4 w-80 bg-white rounded-lg shadow-xl">
+        <div className="fixed bottom-16 right-4 w-80 bg-white shadow-xl">
           <div className="p-4 border-b">
             <h3 className="text-lg font-semibold">Assistant</h3>
           </div>
@@ -56,7 +56,7 @@ export function ChatWidget() {
                 }`}
               >
                 <div
-                  className={`inline-block p-2 rounded-lg ${
+                  className={`inline-block p-2 ${
                     msg.isUser
                       ? "bg-blue-500 text-white"
                       : "bg-gray-200 text-gray-800"
@@ -74,11 +74,11 @@ export function ChatWidget() {
                 type="text"
                 name="message"
                 placeholder="Tapez votre message..."
-                className="flex-1 p-2 border rounded"
+                className="flex-1 p-2 border"
               />
               <button
                 type="submit"
-                className="bg-blue-500 text-white px-4 py-2 rounded"
+                className="bg-blue-500 text-white px-4 py-2"
               >
                 Envoyer
               </button>
