@@ -17,21 +17,16 @@ class ChatWidget {
     this.chatLogo = this.widget.dataset.chatLogo;
     this.logoSize = this.widget.dataset.logoSize || '32';
 
+    // Suggestions de questions prédéfinies
     this.quickButtons = [
       {
-        text: "📦 Suivi de commande",
+        text: "Suivre ma commande",
         message: "Je voudrais suivre ma commande"
       },
       {
-        text: "👋 Contacter le service client",
+        text: "Contacter le service client",
         message: "Je souhaite contacter le service client"
       }
-    ];
-
-    // Suggestions de questions prédéfinies
-    this.suggestions = [
-      'Suivre ma commande',
-      'Contacter le service client'
     ];
 
     this.createWidget();
@@ -98,9 +93,9 @@ class ChatWidget {
           <div class="message-content">${this.welcomeMessage}</div>
         </div>
       </div>
-      <div class="chat-quick-buttons">
+      <div class="suggestions-container">
         ${this.quickButtons.map(button => `
-          <button class="quick-button" data-message="${button.message}">
+          <button class="suggestion-button" data-message="${button.message}">
             ${button.text}
           </button>
         `).join('')}
@@ -118,25 +113,6 @@ class ChatWidget {
     chatContainer.appendChild(chatButton);
     chatContainer.appendChild(chatWindow);
     this.widget.appendChild(chatContainer);
-
-    // Initialiser les écouteurs d'événements pour les boutons rapides
-    const quickButtons = chatWindow.querySelectorAll('.quick-button');
-    quickButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const message = button.dataset.message;
-        this.addMessage(message, true);
-        
-        setTimeout(() => {
-          let response;
-          if (message.includes('commande')) {
-            response = "Pour suivre votre commande, veuillez me fournir votre numéro de commande.";
-          } else if (message.includes('service client')) {
-            response = "Je vais vous mettre en relation avec notre service client. En attendant, pouvez-vous me décrire votre problème ?";
-          }
-          this.addMessage(response, false);
-        }, 1000);
-      });
-    });
 
     // Rendre le conteneur visible
     chatContainer.style.display = 'block';
@@ -168,7 +144,9 @@ class ChatWidget {
     const chatForm = this.widget.querySelector('.chat-form');
     const closeIcon = chatButton.querySelector('.close-icon');
     const chatIcon = chatButton.querySelector('.chat-icon');
+    const suggestionButtons = this.widget.querySelectorAll('.suggestion-button');
 
+    // Gérer l'ouverture/fermeture du chat
     chatButton.addEventListener('click', () => {
       const isOpen = chatWindow.classList.contains('open');
       chatWindow.classList.toggle('open');
@@ -177,7 +155,17 @@ class ChatWidget {
       chatButton.classList.toggle('active');
     });
 
-    chatForm.addEventListener('submit', (e) => {
+    // Gérer les clics sur les suggestions
+    suggestionButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const message = button.dataset.message;
+        this.addMessage(button.textContent, true);
+        this.handleUserMessage(message);
+      });
+    });
+
+    // Gérer l'envoi des messages
+    chatForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const input = chatForm.querySelector('input');
       const message = input.value.trim();
@@ -185,12 +173,26 @@ class ChatWidget {
       if (message) {
         this.addMessage(message, true);
         input.value = '';
-        
-        setTimeout(() => {
-          this.addMessage("Je vais vous aider avec votre demande. Un instant s'il vous plaît...", false);
-        }, 1000);
+        await this.handleUserMessage(message);
       }
     });
+  }
+
+  async handleUserMessage(message) {
+    try {
+      const response = await fetch('/apps/chat-assistant/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message }),
+      });
+      const data = await response.json();
+      this.addMessage(data.response, false);
+    } catch (error) {
+      console.error('Error:', error);
+      this.addMessage('Désolé, une erreur est survenue. Veuillez réessayer.', false);
+    }
   }
 
   applyCustomStyles() {
@@ -260,23 +262,6 @@ class ChatWidget {
       }
     `;
     document.head.appendChild(style);
-  }
-
-  async handleUserMessage(message) {
-    try {
-      const response = await fetch('/apps/chat-assistant/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ message }),
-      });
-      const data = await response.json();
-      this.addMessage(data.response, false);
-    } catch (error) {
-      console.error('Error:', error);
-      this.addMessage('Désolé, une erreur est survenue. Veuillez réessayer.', false);
-    }
   }
 }
 
