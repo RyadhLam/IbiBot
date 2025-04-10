@@ -18,6 +18,12 @@ class ChatWidget {
     this.chatLogo = this.widget.dataset.chatLogo;
     this.logoSize = this.widget.dataset.logoSize;
 
+    // Suggestions de questions prédéfinies
+    this.suggestions = [
+      'Suivre ma commande',
+      'Contacter le service client'
+    ];
+
     this.createWidget();
     this.initializeEventListeners();
     this.applyCustomStyles();
@@ -75,11 +81,19 @@ class ChatWidget {
       </div>
       <div class="chat-messages">
         <div class="message bot-message">
+          <div class="bot-avatar">
+            <img src="{{ 'bot-avatar.gif' | asset_url }}" alt="Bot Avatar">
+          </div>
           <div class="message-content">${this.welcomeMessage}</div>
         </div>
       </div>
+      <div class="suggestions-container">
+        ${this.suggestions.map(suggestion => `
+          <button class="suggestion-button" type="button">${suggestion}</button>
+        `).join('')}
+      </div>
       <form class="chat-form">
-        <input type="text" placeholder="Tapez votre message..." required>
+        <input type="text" placeholder="Écrire un message..." required>
         <button type="submit">
           <svg viewBox="0 0 24 24" width="24" height="24">
             <path fill="currentColor" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
@@ -171,6 +185,7 @@ class ChatWidget {
     const chatIcon = chatButton.querySelector('.chat-icon');
     const closeIcon = chatButton.querySelector('.close-icon');
     const chatForm = this.widget.querySelector('.chat-form');
+    const suggestionButtons = this.widget.querySelectorAll('.suggestion-button');
 
     // Ouvrir/fermer la fenêtre de chat
     chatButton.addEventListener('click', () => {
@@ -180,6 +195,15 @@ class ChatWidget {
       chatButton.classList.toggle('active');
     });
 
+    // Gérer les clics sur les suggestions
+    suggestionButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const message = button.textContent;
+        this.addMessage(message, true);
+        this.handleUserMessage(message);
+      });
+    });
+
     // Gérer l'envoi des messages
     chatForm.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -187,27 +211,9 @@ class ChatWidget {
       const message = input.value.trim();
       if (!message) return;
 
-      // Ajouter le message de l'utilisateur
       this.addMessage(message, true);
       input.value = '';
-
-      try {
-        const response = await fetch('/apps/chat-assistant/api/chat', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ message }),
-        });
-
-        if (!response.ok) throw new Error('Erreur de réponse');
-
-        const data = await response.json();
-        this.addMessage(data.response, false);
-      } catch (error) {
-        console.error('Erreur:', error);
-        this.addMessage('Désolé, une erreur est survenue. Veuillez réessayer.', false);
-      }
+      await this.handleUserMessage(message);
     });
   }
 
@@ -215,13 +221,37 @@ class ChatWidget {
     const messagesContainer = this.widget.querySelector('.chat-messages');
     const messageDiv = document.createElement('div');
     messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
-    messageDiv.innerHTML = `
-      <div class="message-content">
-        ${text}
-      </div>
-    `;
+    
+    let messageHTML = '';
+    if (!isUser) {
+      messageHTML += `
+        <div class="bot-avatar">
+          <img src="{{ 'bot-avatar.gif' | asset_url }}" alt="Bot Avatar">
+        </div>
+      `;
+    }
+    messageHTML += `<div class="message-content">${text}</div>`;
+    messageDiv.innerHTML = messageHTML;
+    
     messagesContainer.appendChild(messageDiv);
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+
+  async handleUserMessage(message) {
+    try {
+      const response = await fetch('/apps/chat-assistant/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message }),
+      });
+      const data = await response.json();
+      this.addMessage(data.response, false);
+    } catch (error) {
+      console.error('Error:', error);
+      this.addMessage('Désolé, une erreur est survenue. Veuillez réessayer.', false);
+    }
   }
 }
 
