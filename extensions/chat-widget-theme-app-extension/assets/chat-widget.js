@@ -70,20 +70,32 @@ class ChatWidget {
       <div class="chat-messages">
         <div class="message bot-message">${this.welcomeMessage}</div>
       </div>
-      <form class="chat-form">
-        <input type="text" placeholder="Tapez votre message..." required>
-        <button type="submit">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="22" y1="2" x2="11" y2="13"></line>
-            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-          </svg>
+      <div class="quick-actions">
+        <button type="button" class="quick-action-button" data-action="track">
+          <span>Suivi de commande</span>
         </button>
+        <button type="button" class="quick-action-button" data-action="contact">
+          <span>Contactez notre service client</span>
+        </button>
+      </div>
+      <form class="chat-form">
+        <div class="message-input-container">
+          <input type="text" placeholder="Tapez votre message..." required>
+          <button type="submit">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+        </div>
       </form>
     `;
 
     chatContainer.appendChild(chatButton);
     chatContainer.appendChild(chatWindow);
     this.widget.appendChild(chatContainer);
+
+    this.initializeQuickActions();
   }
 
   applyCustomStyles() {
@@ -137,6 +149,32 @@ class ChatWidget {
           this.addMessage("Je vais vous aider avec votre demande. Un instant s'il vous plaît...");
         }, 1000);
       }
+    });
+  }
+
+  initializeQuickActions() {
+    const quickButtons = this.widget.querySelectorAll('.quick-action-button');
+    quickButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const action = button.dataset.action;
+        let message = '';
+        
+        switch(action) {
+          case 'track':
+            message = "Je souhaite suivre ma commande";
+            break;
+          case 'contact':
+            message = "Je souhaite contacter le service client";
+            break;
+        }
+        
+        if (message) {
+          this.addMessage(message, true);
+          setTimeout(() => {
+            this.addMessage("Je vais vous aider avec votre demande. Un instant s'il vous plaît...");
+          }, 1000);
+        }
+      });
     });
   }
 }
