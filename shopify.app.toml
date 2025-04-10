@@ -2,7 +2,7 @@
 
 name = "aria"
 client_id = "332cb4617693ed6b0861c91a3e943510"
-application_url = "https://collar-poison-vault-print.trycloudflare.com"
+application_url = "https://vp-hands-dennis-stockholm.trycloudflare.com"
 embedded = true
 handle = "aria-3"
 
@@ -27,9 +27,9 @@ scopes = "write_products"
 
 [auth]
 redirect_urls = [
-  "https://collar-poison-vault-print.trycloudflare.com/auth/callback",
-  "https://collar-poison-vault-print.trycloudflare.com/auth/shopify/callback",
-  "https://collar-poison-vault-print.trycloudflare.com/api/auth/callback"
+  "https://vp-hands-dennis-stockholm.trycloudflare.com/auth/callback",
+  "https://vp-hands-dennis-stockholm.trycloudflare.com/auth/shopify/callback",
+  "https://vp-hands-dennis-stockholm.trycloudflare.com/api/auth/callback"
 ]
 
 [pos]
