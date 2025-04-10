@@ -1,13 +1,27 @@
 {% schema %}
 {
-  "name": "Chat Assistant IA",
+  "name": "IbiBot Assistant",
   "target": "body",
   "stylesheet": "chat-widget.css",
   "javascript": "chat-widget.js",
   "settings": [
     {
-      "type": "header",
-      "content": "Style du bouton"
+      "type": "text",
+      "id": "welcome_message",
+      "label": "Message de bienvenue",
+      "default": "Bonjour ! Je suis IbiBot, comment puis-je vous aider ?"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Couleur du bouton",
+      "default": "#2B3B56"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Texte du bouton",
+      "default": "Chat avec IbiBot"
     },
     {
       "type": "select",
@@ -15,15 +29,15 @@
       "label": "Style du bouton",
       "options": [
         {
-          "value": "bubble",
-          "label": "Bulle ronde"
+          "value": "circle",
+          "label": "Rond"
         },
         {
           "value": "rectangle",
           "label": "Rectangle"
         }
       ],
-      "default": "bubble"
+      "default": "circle"
     },
     {
       "type": "select",
@@ -32,7 +46,7 @@
       "options": [
         {
           "value": "chat",
-          "label": "Bulle de chat"
+          "label": "Chat"
         },
         {
           "value": "message",
@@ -46,32 +60,10 @@
       "default": "chat"
     },
     {
-      "type": "color",
-      "id": "button_color",
-      "label": "Couleur du bouton",
-      "default": "#2E496A"
-    },
-    {
-      "type": "text",
-      "id": "button_text",
-      "label": "Texte du bouton",
-      "default": "Chat avec l'assistant"
-    },
-    {
-      "type": "header",
-      "content": "Fenêtre de chat"
-    },
-    {
-      "type": "text",
-      "id": "welcome_message",
-      "label": "Message de bienvenue",
-      "default": "Bonjour ! Comment puis-je vous aider ?"
-    },
-    {
       "type": "text",
       "id": "chat_title",
-      "label": "Titre de la fenêtre de chat",
-      "default": "Assistant"
+      "label": "Titre du chat",
+      "default": "IbiBot"
     },
     {
       "type": "color",
@@ -82,8 +74,8 @@
     {
       "type": "color",
       "id": "chat_background",
-      "label": "Couleur de fond de la conversation",
-      "default": "#f8f9fa"
+      "label": "Couleur de fond du chat",
+      "default": "#FFFFFF"
     },
     {
       "type": "color",
@@ -94,24 +86,8 @@
     {
       "type": "color",
       "id": "bot_message_color",
-      "label": "Couleur des messages assistant",
-      "default": "#FFFFFF"
-    },
-    {
-      "type": "image_picker",
-      "id": "chat_logo",
-      "label": "Logo personnalisé",
-      "info": "Recommandé: 40x40px à 100x100px"
-    },
-    {
-      "type": "range",
-      "id": "logo_size",
-      "min": 20,
-      "max": 60,
-      "step": 5,
-      "unit": "px",
-      "label": "Taille du logo",
-      "default": 40
+      "label": "Couleur des messages du bot",
+      "default": "#F0F0F0"
     },
     {
       "type": "select",
@@ -128,6 +104,16 @@
         }
       ],
       "default": "bottom-right"
+    },
+    {
+      "type": "range",
+      "id": "logo_size",
+      "min": 20,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Taille du logo",
+      "default": 32
     }
   ]
 }
@@ -145,6 +131,6 @@
   data-user-message-color="{{ block.settings.user_message_color }}"
   data-bot-message-color="{{ block.settings.bot_message_color }}"
   data-chat-position="{{ block.settings.chat_position }}"
-  data-chat-logo="{{ block.settings.chat_logo | image_url: width: block.settings.logo_size }}"
+  data-chat-logo="{{ 'bot-avatar.svg' | asset_url }}"
   data-logo-size="{{ block.settings.logo_size }}">
 </div> 

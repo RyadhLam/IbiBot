@@ -3,20 +3,30 @@ class ChatWidget {
     this.widget = document.getElementById('shopify-chat-widget');
     if (!this.widget) return;
 
-    // Récupérer toutes les options de personnalisation
     this.welcomeMessage = this.widget.dataset.welcomeMessage;
     this.buttonColor = this.widget.dataset.buttonColor;
     this.buttonText = this.widget.dataset.buttonText;
-    this.buttonStyle = this.widget.dataset.buttonStyle;
-    this.buttonIcon = this.widget.dataset.buttonIcon;
+    this.buttonStyle = this.widget.dataset.buttonStyle || 'circle';
+    this.buttonIcon = this.widget.dataset.buttonIcon || 'chat';
     this.chatTitle = this.widget.dataset.chatTitle;
     this.headerColor = this.widget.dataset.headerColor;
     this.chatBackground = this.widget.dataset.chatBackground;
     this.userMessageColor = this.widget.dataset.userMessageColor;
     this.botMessageColor = this.widget.dataset.botMessageColor;
-    this.chatPosition = this.widget.dataset.chatPosition;
+    this.chatPosition = this.widget.dataset.chatPosition || 'bottom-right';
     this.chatLogo = this.widget.dataset.chatLogo;
-    this.logoSize = this.widget.dataset.logoSize;
+    this.logoSize = this.widget.dataset.logoSize || '32';
+
+    this.quickButtons = [
+      {
+        text: "📦 Suivi de commande",
+        message: "Je voudrais suivre ma commande"
+      },
+      {
+        text: "👋 Contacter le service client",
+        message: "Je souhaite contacter le service client"
+      }
+    ];
 
     // Suggestions de questions prédéfinies
     this.suggestions = [
@@ -48,9 +58,8 @@ class ChatWidget {
   createWidget() {
     const chatContainer = document.createElement('div');
     chatContainer.className = 'chat-widget-container';
-    chatContainer.style.display = 'none';
 
-    // Créer le bouton de chat avec icône
+    // Créer le bouton de chat
     const chatButton = document.createElement('button');
     chatButton.className = `chat-widget-button ${this.buttonStyle}`;
     chatButton.style.backgroundColor = this.buttonColor;
@@ -66,6 +75,8 @@ class ChatWidget {
     // Créer la fenêtre de chat
     const chatWindow = document.createElement('div');
     chatWindow.className = 'chat-window';
+
+    // Structure de la fenêtre de chat
     chatWindow.innerHTML = `
       <div class="chat-header">
         <div class="chat-header-title">
@@ -87,9 +98,17 @@ class ChatWidget {
           <div class="message-content">${this.welcomeMessage}</div>
         </div>
       </div>
+<<<<<<< HEAD
       <div class="suggestions-container">
         ${this.suggestions.map(suggestion => `
           <button class="suggestion-button" type="button">${suggestion}</button>
+=======
+      <div class="chat-quick-buttons">
+        ${this.quickButtons.map(button => `
+          <button class="quick-button" data-message="${button.message}">
+            ${button.text}
+          </button>
+>>>>>>> main
         `).join('')}
       </div>
       <form class="chat-form">
@@ -106,8 +125,67 @@ class ChatWidget {
     chatContainer.appendChild(chatWindow);
     this.widget.appendChild(chatContainer);
 
-    // Rendre le conteneur visible après l'avoir ajouté au DOM
+    // Initialiser les écouteurs d'événements pour les boutons rapides
+    const quickButtons = chatWindow.querySelectorAll('.quick-button');
+    quickButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const message = button.dataset.message;
+        this.addMessage(message, true);
+        
+        setTimeout(() => {
+          let response;
+          if (message.includes('commande')) {
+            response = "Pour suivre votre commande, veuillez me fournir votre numéro de commande.";
+          } else if (message.includes('service client')) {
+            response = "Je vais vous mettre en relation avec notre service client. En attendant, pouvez-vous me décrire votre problème ?";
+          }
+          this.addMessage(response, false);
+        }, 1000);
+      });
+    });
+
+    // Rendre le conteneur visible
     chatContainer.style.display = 'block';
+  }
+
+  addMessage(message, isUser = false) {
+    const messagesContainer = this.widget.querySelector('.chat-messages');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+    messageDiv.innerHTML = `<div class="message-content">${message}</div>`;
+    messagesContainer.appendChild(messageDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+
+  initializeEventListeners() {
+    const chatButton = this.widget.querySelector('.chat-widget-button');
+    const chatWindow = this.widget.querySelector('.chat-window');
+    const chatForm = this.widget.querySelector('.chat-form');
+    const closeIcon = chatButton.querySelector('.close-icon');
+    const chatIcon = chatButton.querySelector('.chat-icon');
+
+    chatButton.addEventListener('click', () => {
+      const isOpen = chatWindow.classList.contains('open');
+      chatWindow.classList.toggle('open');
+      closeIcon.style.display = isOpen ? 'none' : 'block';
+      chatIcon.style.display = isOpen ? 'block' : 'none';
+      chatButton.classList.toggle('active');
+    });
+
+    chatForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = chatForm.querySelector('input');
+      const message = input.value.trim();
+      
+      if (message) {
+        this.addMessage(message, true);
+        input.value = '';
+        
+        setTimeout(() => {
+          this.addMessage("Je vais vous aider avec votre demande. Un instant s'il vous plaît...", false);
+        }, 1000);
+      }
+    });
   }
 
   applyCustomStyles() {
@@ -178,6 +256,7 @@ class ChatWidget {
     `;
     document.head.appendChild(style);
   }
+<<<<<<< HEAD
 
   initializeEventListeners() {
     const chatButton = this.widget.querySelector('.chat-widget-button');
@@ -253,6 +332,8 @@ class ChatWidget {
       this.addMessage('Désolé, une erreur est survenue. Veuillez réessayer.', false);
     }
   }
+=======
+>>>>>>> main
 }
 
 // Initialiser le widget quand le DOM est chargé
