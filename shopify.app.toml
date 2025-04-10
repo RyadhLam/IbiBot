@@ -3,7 +3,7 @@
 client_id = "332cb4617693ed6b0861c91a3e943510"
 name = "IbiBot"
 handle = "aria-3"
-application_url = "https://fourth-rp-regulations-cpu.trycloudflare.com"
+application_url = "https://resume-discussing-cowboy-handy.trycloudflare.com"
 embedded = true
 
 [build]
@@ -27,9 +27,9 @@ scopes = "write_products"
 
 [auth]
 redirect_urls = [
-  "https://fourth-rp-regulations-cpu.trycloudflare.com/auth/callback",
-  "https://fourth-rp-regulations-cpu.trycloudflare.com/auth/shopify/callback",
-  "https://fourth-rp-regulations-cpu.trycloudflare.com/api/auth/callback"
+  "https://resume-discussing-cowboy-handy.trycloudflare.com/auth/callback",
+  "https://resume-discussing-cowboy-handy.trycloudflare.com/auth/shopify/callback",
+  "https://resume-discussing-cowboy-handy.trycloudflare.com/api/auth/callback"
 ]
 
 [pos]
