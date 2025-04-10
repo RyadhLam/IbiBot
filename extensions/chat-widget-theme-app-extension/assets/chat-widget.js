@@ -88,7 +88,7 @@ class ChatWidget {
       <div class="chat-messages">
         <div class="message bot-message">
           <div class="bot-avatar">
-            <img src="{{ 'bot-avatar.gif' | asset_url }}" alt="Bot Avatar">
+            <img src="./bot-avatar.gif" alt="Bot Avatar">
           </div>
           <div class="message-content">${this.welcomeMessage}</div>
         </div>
@@ -127,7 +127,7 @@ class ChatWidget {
     if (!isUser) {
       messageHTML += `
         <div class="bot-avatar">
-          <img src="{{ 'bot-avatar.gif' | asset_url }}" alt="Bot Avatar">
+          <img src="./bot-avatar.gif" alt="Bot Avatar">
         </div>
       `;
     }
