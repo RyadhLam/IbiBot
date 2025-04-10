@@ -98,17 +98,11 @@ class ChatWidget {
           <div class="message-content">${this.welcomeMessage}</div>
         </div>
       </div>
-<<<<<<< HEAD
-      <div class="suggestions-container">
-        ${this.suggestions.map(suggestion => `
-          <button class="suggestion-button" type="button">${suggestion}</button>
-=======
       <div class="chat-quick-buttons">
         ${this.quickButtons.map(button => `
           <button class="quick-button" data-message="${button.message}">
             ${button.text}
           </button>
->>>>>>> main
         `).join('')}
       </div>
       <form class="chat-form">
@@ -148,11 +142,22 @@ class ChatWidget {
     chatContainer.style.display = 'block';
   }
 
-  addMessage(message, isUser = false) {
+  addMessage(text, isUser) {
     const messagesContainer = this.widget.querySelector('.chat-messages');
     const messageDiv = document.createElement('div');
     messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
-    messageDiv.innerHTML = `<div class="message-content">${message}</div>`;
+    
+    let messageHTML = '';
+    if (!isUser) {
+      messageHTML += `
+        <div class="bot-avatar">
+          <img src="{{ 'bot-avatar.gif' | asset_url }}" alt="Bot Avatar">
+        </div>
+      `;
+    }
+    messageHTML += `<div class="message-content">${text}</div>`;
+    messageDiv.innerHTML = messageHTML;
+    
     messagesContainer.appendChild(messageDiv);
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
   }
@@ -256,65 +261,6 @@ class ChatWidget {
     `;
     document.head.appendChild(style);
   }
-<<<<<<< HEAD
-
-  initializeEventListeners() {
-    const chatButton = this.widget.querySelector('.chat-widget-button');
-    const chatWindow = this.widget.querySelector('.chat-window');
-    const chatIcon = chatButton.querySelector('.chat-icon');
-    const closeIcon = chatButton.querySelector('.close-icon');
-    const chatForm = this.widget.querySelector('.chat-form');
-    const suggestionButtons = this.widget.querySelectorAll('.suggestion-button');
-
-    // Ouvrir/fermer la fenêtre de chat
-    chatButton.addEventListener('click', () => {
-      const isOpen = chatWindow.classList.toggle('open');
-      chatIcon.style.display = isOpen ? 'none' : 'block';
-      closeIcon.style.display = isOpen ? 'block' : 'none';
-      chatButton.classList.toggle('active');
-    });
-
-    // Gérer les clics sur les suggestions
-    suggestionButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const message = button.textContent;
-        this.addMessage(message, true);
-        this.handleUserMessage(message);
-      });
-    });
-
-    // Gérer l'envoi des messages
-    chatForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const input = chatForm.querySelector('input');
-      const message = input.value.trim();
-      if (!message) return;
-
-      this.addMessage(message, true);
-      input.value = '';
-      await this.handleUserMessage(message);
-    });
-  }
-
-  addMessage(text, isUser) {
-    const messagesContainer = this.widget.querySelector('.chat-messages');
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
-    
-    let messageHTML = '';
-    if (!isUser) {
-      messageHTML += `
-        <div class="bot-avatar">
-          <img src="{{ 'bot-avatar.gif' | asset_url }}" alt="Bot Avatar">
-        </div>
-      `;
-    }
-    messageHTML += `<div class="message-content">${text}</div>`;
-    messageDiv.innerHTML = messageHTML;
-    
-    messagesContainer.appendChild(messageDiv);
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-  }
 
   async handleUserMessage(message) {
     try {
@@ -332,8 +278,6 @@ class ChatWidget {
       this.addMessage('Désolé, une erreur est survenue. Veuillez réessayer.', false);
     }
   }
-=======
->>>>>>> main
 }
 
 // Initialiser le widget quand le DOM est chargé
