@@ -1,14 +1,10 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
+name = "aria"
 client_id = "332cb4617693ed6b0861c91a3e943510"
-name = "IbiBot"
-handle = "aria-3"
-<<<<<<< HEAD
-application_url = "https://powell-literature-lawyer-legislation.trycloudflare.com"
-=======
-application_url = "https://resume-discussing-cowboy-handy.trycloudflare.com"
->>>>>>> main
+application_url = "https://collar-poison-vault-print.trycloudflare.com"
 embedded = true
+handle = "aria-3"
 
 [build]
 include_config_on_deploy = true
@@ -31,15 +27,9 @@ scopes = "write_products"
 
 [auth]
 redirect_urls = [
-<<<<<<< HEAD
-  "https://powell-literature-lawyer-legislation.trycloudflare.com/auth/callback",
-  "https://powell-literature-lawyer-legislation.trycloudflare.com/auth/shopify/callback",
-  "https://powell-literature-lawyer-legislation.trycloudflare.com/api/auth/callback"
-=======
-  "https://resume-discussing-cowboy-handy.trycloudflare.com/auth/callback",
-  "https://resume-discussing-cowboy-handy.trycloudflare.com/auth/shopify/callback",
-  "https://resume-discussing-cowboy-handy.trycloudflare.com/api/auth/callback"
->>>>>>> main
+  "https://collar-poison-vault-print.trycloudflare.com/auth/callback",
+  "https://collar-poison-vault-print.trycloudflare.com/auth/shopify/callback",
+  "https://collar-poison-vault-print.trycloudflare.com/api/auth/callback"
 ]
 
 [pos]
