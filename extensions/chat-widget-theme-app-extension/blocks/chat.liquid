@@ -12,16 +12,10 @@
       "default": "Bonjour ! Je suis IbiBot, comment puis-je vous aider ?"
     },
     {
-      "type": "color",
-      "id": "button_color",
-      "label": "Couleur du bouton",
-      "default": "#2B3B56"
-    },
-    {
       "type": "text",
-      "id": "button_text",
-      "label": "Texte du bouton",
-      "default": "Chat avec IbiBot"
+      "id": "chat_title",
+      "label": "Titre du chat",
+      "default": "IbiBot"
     },
     {
       "type": "select",
@@ -30,11 +24,11 @@
       "options": [
         {
           "value": "circle",
-          "label": "Rond"
+          "label": "Cercle"
         },
         {
-          "value": "rectangle",
-          "label": "Rectangle"
+          "value": "rounded",
+          "label": "Arrondi"
         }
       ],
       "default": "circle"
@@ -53,17 +47,23 @@
           "label": "Message"
         },
         {
-          "value": "support",
-          "label": "Support"
+          "value": "help",
+          "label": "Aide"
         }
       ],
       "default": "chat"
     },
     {
       "type": "text",
-      "id": "chat_title",
-      "label": "Titre du chat",
-      "default": "IbiBot"
+      "id": "button_text",
+      "label": "Texte du bouton",
+      "default": "Chat avec IbiBot"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Couleur du bouton",
+      "default": "#2B3B56"
     },
     {
       "type": "color",
@@ -86,7 +86,7 @@
     {
       "type": "color",
       "id": "bot_message_color",
-      "label": "Couleur des messages du bot",
+      "label": "Couleur des messages bot",
       "default": "#F0F0F0"
     },
     {
@@ -95,25 +95,30 @@
       "label": "Position du chat",
       "options": [
         {
-          "value": "bottom-right",
-          "label": "Bas droite"
+          "value": "right",
+          "label": "Droite"
         },
         {
-          "value": "bottom-left",
-          "label": "Bas gauche"
+          "value": "left",
+          "label": "Gauche"
         }
       ],
-      "default": "bottom-right"
+      "default": "right"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo personnalisé"
     },
     {
       "type": "range",
       "id": "logo_size",
       "min": 20,
-      "max": 50,
-      "step": 2,
+      "max": 60,
+      "step": 5,
       "unit": "px",
       "label": "Taille du logo",
-      "default": 32
+      "default": 40
     }
   ]
 }
@@ -121,16 +126,18 @@
 
 <div id="shopify-chat-widget" 
   data-welcome-message="{{ block.settings.welcome_message }}"
-  data-button-color="{{ block.settings.button_color }}"
-  data-button-text="{{ block.settings.button_text }}"
+  data-chat-title="{{ block.settings.chat_title }}"
   data-button-style="{{ block.settings.button_style }}"
   data-button-icon="{{ block.settings.button_icon }}"
-  data-chat-title="{{ block.settings.chat_title }}"
+  data-button-text="{{ block.settings.button_text }}"
+  data-button-color="{{ block.settings.button_color }}"
   data-header-color="{{ block.settings.header_color }}"
   data-chat-background="{{ block.settings.chat_background }}"
   data-user-message-color="{{ block.settings.user_message_color }}"
   data-bot-message-color="{{ block.settings.bot_message_color }}"
   data-chat-position="{{ block.settings.chat_position }}"
-  data-chat-logo="{{ 'bot-avatar.svg' | asset_url }}"
-  data-logo-size="{{ block.settings.logo_size }}">
+  {% if block.settings.logo %}
+    data-logo="{{ block.settings.logo | image_url }}"
+    data-logo-size="{{ block.settings.logo_size }}"
+  {% endif %}>
 </div> 
