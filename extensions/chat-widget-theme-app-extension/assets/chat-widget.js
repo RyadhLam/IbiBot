@@ -19,7 +19,6 @@ class ChatWidget {
     this.logoSize = this.widget.dataset.logoSize;
 
     this.createWidget();
-    this.applyCustomStyles();
     this.initializeEventListeners();
   }
 
@@ -48,7 +47,6 @@ class ChatWidget {
     const chatButton = document.createElement('button');
     chatButton.className = 'chat-widget-button';
     chatButton.setAttribute('data-style', this.buttonStyle);
-    chatButton.style.backgroundColor = this.buttonColor;
     
     if (this.buttonStyle === 'circle') {
       chatButton.innerHTML = this.getIconSvg();
@@ -98,31 +96,11 @@ class ChatWidget {
     this.initializeQuickActions();
   }
 
-  applyCustomStyles() {
-    const chatWindow = this.widget.querySelector('.chat-window');
-    const header = chatWindow.querySelector('.chat-header');
-    const messages = chatWindow.querySelectorAll('.message');
-    const userMessages = chatWindow.querySelectorAll('.user-message');
-    const botMessages = chatWindow.querySelectorAll('.bot-message');
-
-    chatWindow.style.background = this.chatBackground;
-    header.style.backgroundColor = this.headerColor;
-
-    userMessages.forEach(msg => {
-      msg.style.backgroundColor = this.userMessageColor;
-    });
-
-    botMessages.forEach(msg => {
-      msg.style.backgroundColor = this.botMessageColor;
-    });
-  }
-
   addMessage(message, isUser = false) {
     const messagesContainer = this.widget.querySelector('.chat-messages');
     const messageDiv = document.createElement('div');
     messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
     messageDiv.textContent = message;
-    messageDiv.style.backgroundColor = isUser ? this.userMessageColor : this.botMessageColor;
     messagesContainer.appendChild(messageDiv);
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
   }
