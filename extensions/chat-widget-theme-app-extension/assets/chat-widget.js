@@ -18,6 +18,9 @@ class ChatWidget {
     this.logo = this.widget.dataset.logo;
     this.logoSize = this.widget.dataset.logoSize;
 
+    // Obtenir le domaine du magasin
+    this.shopDomain = window.Shopify ? window.Shopify.shop : '';
+
     this.createWidget();
     this.applyCustomStyles();
     this.initializeEventListeners();
@@ -70,25 +73,27 @@ class ChatWidget {
       <div class="chat-messages">
         <div class="message bot-message">${this.welcomeMessage}</div>
       </div>
-      <div class="quick-actions">
-        <button type="button" class="quick-action-button" data-action="track">
-          <span>Suivi de commande</span>
-        </button>
-        <button type="button" class="quick-action-button" data-action="contact">
-          <span>Contactez notre service client</span>
-        </button>
-      </div>
-      <form class="chat-form">
-        <div class="message-input-container">
-          <input type="text" placeholder="Tapez votre message..." required>
-          <button type="submit">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="22" y1="2" x2="11" y2="13"></line>
-              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-            </svg>
+      <div class="chat-input-area">
+        <div class="quick-actions">
+          <button type="button" class="quick-action-button" data-action="track">
+            <span>Suivi de commande</span>
+          </button>
+          <button type="button" class="quick-action-button" data-action="contact">
+            <span>Contactez notre service client</span>
           </button>
         </div>
-      </form>
+        <form class="chat-form">
+          <div class="message-input-container">
+            <input type="text" placeholder="Tapez votre message..." required>
+            <button type="submit">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </button>
+          </div>
+        </form>
+      </div>
     `;
 
     chatContainer.appendChild(chatButton);
@@ -117,14 +122,54 @@ class ChatWidget {
     });
   }
 
-  addMessage(message, isUser = false) {
-    const messagesContainer = this.widget.querySelector('.chat-messages');
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
-    messageDiv.textContent = message;
-    messageDiv.style.backgroundColor = isUser ? this.userMessageColor : this.botMessageColor;
-    messagesContainer.appendChild(messageDiv);
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  async sendMessageToAI(message) {
+    try {
+      const response = await fetch('/apps/ibibot/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message,
+          shopDomain: this.shopDomain
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Erreur réseau');
+      }
+
+      const data = await response.json();
+      return data.response;
+    } catch (error) {
+      console.error('Erreur lors de l\'envoi du message:', error);
+      return "Désolé, je rencontre des difficultés techniques. Veuillez réessayer plus tard.";
+    }
+  }
+
+  async handleUserMessage(message) {
+    // Afficher le message de l'utilisateur
+    this.addMessage(message, true);
+    
+    // Afficher l'indicateur de chargement
+    const loadingMessage = this.addMessage("...", false);
+    
+    try {
+      // Envoyer le message à l'API et attendre la réponse
+      const aiResponse = await this.sendMessageToAI(message);
+      
+      // Supprimer l'indicateur de chargement
+      loadingMessage.remove();
+      
+      // Afficher la réponse de l'AI
+      this.addMessage(aiResponse, false);
+    } catch (error) {
+      // Supprimer l'indicateur de chargement
+      loadingMessage.remove();
+      
+      // Afficher un message d'erreur
+      this.addMessage("Désolé, je ne peux pas traiter votre demande pour le moment.", false);
+    }
   }
 
   initializeEventListeners() {
@@ -136,18 +181,14 @@ class ChatWidget {
       chatWindow.classList.toggle('open');
     });
 
-    chatForm.addEventListener('submit', (e) => {
+    chatForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const input = chatForm.querySelector('input');
       const message = input.value.trim();
       
       if (message) {
-        this.addMessage(message, true);
         input.value = '';
-        
-        setTimeout(() => {
-          this.addMessage("Je vais vous aider avec votre demande. Un instant s'il vous plaît...");
-        }, 1000);
+        await this.handleUserMessage(message);
       }
     });
   }
@@ -155,7 +196,7 @@ class ChatWidget {
   initializeQuickActions() {
     const quickButtons = this.widget.querySelectorAll('.quick-action-button');
     quickButtons.forEach(button => {
-      button.addEventListener('click', () => {
+      button.addEventListener('click', async () => {
         const action = button.dataset.action;
         let message = '';
         
@@ -169,13 +210,21 @@ class ChatWidget {
         }
         
         if (message) {
-          this.addMessage(message, true);
-          setTimeout(() => {
-            this.addMessage("Je vais vous aider avec votre demande. Un instant s'il vous plaît...");
-          }, 1000);
+          await this.handleUserMessage(message);
         }
       });
     });
+  }
+
+  addMessage(message, isUser = false) {
+    const messagesContainer = this.widget.querySelector('.chat-messages');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+    messageDiv.textContent = message;
+    messageDiv.style.backgroundColor = isUser ? this.userMessageColor : this.botMessageColor;
+    messagesContainer.appendChild(messageDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    return messageDiv;
   }
 }
 
