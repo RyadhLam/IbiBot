@@ -9,11 +9,11 @@ class ChatWidget {
     this.buttonStyle = this.widget.dataset.buttonStyle;
     this.buttonIcon = this.widget.dataset.buttonIcon;
     this.buttonText = this.widget.dataset.buttonText;
-    this.buttonColor = this.widget.dataset.buttonColor;
-    this.headerColor = this.widget.dataset.headerColor;
-    this.chatBackground = this.widget.dataset.chatBackground;
-    this.userMessageColor = this.widget.dataset.userMessageColor;
-    this.botMessageColor = this.widget.dataset.botMessageColor;
+    this.buttonColor = '#feedc8';  // Couleur fixe
+    this.headerColor = '#feedc8';  // Couleur fixe
+    this.chatBackground = '#FFFFFF';
+    this.userMessageColor = '#feedc8';  // Couleur fixe
+    this.botMessageColor = '#F0F0F0';
     this.chatPosition = this.widget.dataset.chatPosition;
     this.logo = this.widget.dataset.logo;
     this.logoSize = this.widget.dataset.logoSize;
@@ -69,7 +69,7 @@ class ChatWidget {
     headerContent += `<span>${this.chatTitle}</span>`;
 
     chatWindow.innerHTML = `
-      <div class="chat-header">${headerContent}</div>
+      <div class="chat-header" style="background-color: ${this.headerColor};">${headerContent}</div>
       <div class="chat-messages">
         <div class="message bot-message">${this.welcomeMessage}</div>
       </div>
@@ -85,7 +85,7 @@ class ChatWidget {
         <form class="chat-form">
           <div class="message-input-container">
             <input type="text" placeholder="Tapez votre message..." required>
-            <button type="submit">
+            <button type="submit" style="background-color: ${this.buttonColor};">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="22" y1="2" x2="11" y2="13"></line>
                 <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
@@ -109,9 +109,13 @@ class ChatWidget {
     const messages = chatWindow.querySelectorAll('.message');
     const userMessages = chatWindow.querySelectorAll('.user-message');
     const botMessages = chatWindow.querySelectorAll('.bot-message');
+    const chatButton = this.widget.querySelector('.chat-widget-button');
+    const submitButton = chatWindow.querySelector('.message-input-container button');
 
-    chatWindow.style.background = this.chatBackground;
+    // Appliquer les couleurs
+    chatButton.style.backgroundColor = this.buttonColor;
     header.style.backgroundColor = this.headerColor;
+    submitButton.style.backgroundColor = this.buttonColor;
 
     userMessages.forEach(msg => {
       msg.style.backgroundColor = this.userMessageColor;
